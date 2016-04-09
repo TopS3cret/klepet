@@ -119,6 +119,15 @@ $(document).ready(function() {
       $("#poslji-sporocilo").val('/zasebno "'+ime+'"').focus();
     });
   });
+  
+  $("#vsebina").jrumble();
+  
+  socket.on('dregljaj', function(odg){
+    if(odg.dregljaj){
+      $("#vsebina").trigger("startRumble");
+      setTimeout(function(){$("#vsebina").trigger("stopRumble");}, 1500);
+    }
+  });
 
   setInterval(function() {
     socket.emit('kanali');
