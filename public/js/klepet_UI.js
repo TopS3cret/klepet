@@ -1,9 +1,17 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
+  var jePosnetek = sporocilo.search(/https:\/\/www\.youtube\.com\/watch\?v=[\w-]+/i) > -1;
+  
   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  }
+  else if(jePosnetek){
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'); // Preprecevanje XSS napadov
+    sporocilo = sporocilo.replace(/https:\/\/www\.youtube\.com\/watch\?v=([\w-]+)/ig, '<iframe src="https://www.youtube.com/embed/$1" allowfullscreen style="width:200px; height: 150px; margin-left:20px"></iframe>');
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+  }
+  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
